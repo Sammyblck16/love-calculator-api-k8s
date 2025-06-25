@@ -1,6 +1,6 @@
 # 💖 Love Calculator API (Kubernetes Deployment)
 
-This project is a fun and simple REST API that calculates a "love score" between two names. It's built with Python and Flask, containerized with Docker, and ready to deploy on Kubernetes.
+This project is built with **Python** and **Flask**, containerized using **Docker**, and ready to deploy on **Kubernetes**.
 
 ---
 
@@ -16,42 +16,54 @@ This project is a fun and simple REST API that calculates a "love score" between
 
 ## 📦 API Usage
 
-### Endpoint
+### ▶️ Endpoint
 
-```http
+```
 POST /calculate
 Content-Type: application/json
+```
 
+### 🧪 Example Request
+
+```json
+{
+  "name1": "Alice",
+  "name2": "Bob"
+}
+```
+
+### ✅ Example Response
+
+```json
+{
+  "score": 74,
+  "message": "Your score is 74."
+}
+```
+
+---
+
+## 📁 Project Structure
+
+```
 .
 ├── app.py               # Flask web server
 ├── requirements.txt     # Python dependencies
 ├── Dockerfile           # Docker image configuration
 ├── deployment.yaml      # Kubernetes Deployment
 ├── service.yaml         # Kubernetes Service (NodePort)
+├── docker-push.sh       # Script to push Docker image
+├── .gitignore           # Ignore unnecessary files
 └── README.md            # Project documentation
-
+```
 
 ---
 
-## ✅ 2. `.gitignore`
+## 🐳 Docker Push Script
 
-This prevents unnecessary files from being pushed:
+Save the script below as `docker-push.sh`:
 
-```gitignore
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.env
-.env.*
-*.sqlite3
-*.log
-*.DS_Store
-.vscode/
-.idea/
-*.swp
-
-1. docker-push.sh — Bash Script to Build & Push to Docker Hub
+```bash
 #!/bin/bash
 
 # -------- CONFIGURE THIS --------
@@ -70,23 +82,22 @@ echo "📤 Pushing Docker image to Docker Hub..."
 docker push $DOCKER_USERNAME/$IMAGE_NAME:$TAG
 
 echo "✅ Done! Image pushed as $DOCKER_USERNAME/$IMAGE_NAME:$TAG"
+```
 
-Usage
-Save it as docker-push.sh
+### 📦 Usage
 
-Make it executable:
-
-bash
-
+```bash
 chmod +x docker-push.sh
-
 ./docker-push.sh
+```
 
-2. .github/workflows/docker-image.yml — GitHub Actions CI
-This workflow automatically builds and pushes your Docker image when you push to main.
+---
 
-📄 File: .github/workflows/docker-image.yml
+## ☸️ GitHub Actions CI
 
+Create a GitHub Actions workflow file at `.github/workflows/docker-image.yml`:
+
+```yaml
 name: Build and Push Docker image
 
 on:
@@ -113,15 +124,40 @@ jobs:
         with:
           push: true
           tags: your-dockerhub-username/love-calculator:latest
+```
 
-GitHub Secrets Setup
-To use this GitHub Actions workflow, go to your repository:
+### 🔐 GitHub Secrets Setup
 
-Navigate to Settings → Secrets and variables → Actions
+To use this GitHub Actions workflow:
 
-Add the following Repository Secrets:
+1. Navigate to **Settings → Secrets and variables → Actions**
+2. Add the following **Repository Secrets**:
+   - `DOCKER_USERNAME`
+   - `DOCKER_PASSWORD` (your Docker Hub password or access token)
 
-DOCKER_USERNAME
+---
 
-DOCKER_PASSWORD (your Docker Hub password or access token)
+## 📄 .gitignore
 
+This prevents unnecessary or sensitive files from being pushed:
+
+```gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.*
+*.sqlite3
+*.log
+*.DS_Store
+.vscode/
+.idea/
+*.swp
+```
+
+---
+
+## 📜 License
+
+This project is open source under the [MIT License](LICENSE).
